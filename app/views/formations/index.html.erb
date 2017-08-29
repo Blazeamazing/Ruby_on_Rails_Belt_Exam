@@ -1,0 +1,59 @@
+<div>
+    <button class="float-right"><a href="/logout/<%= current_user.id %>" data-method="delete">Logout</a></button>
+</div>
+<div class="row">
+    <div class="col-5">
+        <h1>Hi,<%= current_user.first_name.titleize %> <%= current_user.last_name.titleize %></h1>
+        <h3>Get in Formation Here:</h3>
+        <% @formations.each do |formation| %>
+            <h4><a href="/formations/<%= formation.id %>"><u><%= formation.name %></u></a></h4>
+            <p>Warriors: <%= formation.warriors.count %></p>
+
+            <% if formation.user == current_user %>
+                <p>Created By: YOU!</p>
+            <% else %>
+                <p>Created By: <%= formation.user.first_name.titleize %> <%= formation.user.last_name.titleize %> </p>
+            <% end %>
+
+            <p>Description: <%= formation.description %></p>
+            <% if formation.user==current_user %>
+
+                <!-- Delete Formation Form -->
+                <form action="/formations/<%= formation.id %>" method='post'>
+                    <input type='hidden' name='_method' value='delete'>
+                    <input type='hidden' name='authenticity_token' value="<%= form_authenticity_token %>">
+                    <button class='btn btn-danger'>Destroy</button>
+                </form>
+                <!-- End Delete Formation Form -->
+
+            <% end %>
+            <hr>
+        <% end %>
+
+    </div>
+
+    <hr noshade>
+
+    <!-- Create Formation Form  -->
+    <div class="col-6">
+    <h2>Create New Formation:</h2>
+    <form action="/formations" method="post">
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+
+        <div class="form-group">
+            <label for="name">Chapter Name:</label>
+            <input type="text" name="formation[name]" id="name" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea name="formation[description]" rows="8" cols="80" id="description" class="form-control"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+    <!-- End Create formation Form -->
+    <div class="col-1"></div>
+    <hr noshade>
+</div>
+

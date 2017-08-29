@@ -1,0 +1,53 @@
+<div>
+   <button class="float-right"><a href="/formations">Dashboard</a><br></button>
+   <button class="float-right"><a href="/logout/<%= current_user.id %>" data-method="delete">Logout</a></button>
+</div>
+<div class="col-5">
+
+   <h3><%= @formation.name %></h3>
+   <p><strong>Description:</strong> <%= @formation.description %></p>
+
+   <% if @formation.users.include?(current_user) %>
+
+      <!-- Leave Formation Action -->
+      <form action="/leave/<%= @formation.id %>" method='post'>
+         <input type='hidden' name='_method' value='delete'>
+         <input type='hidden' name='authenticity_token' value="<%= form_authenticity_token %>">
+         <button class='float-right btn btn-danger'>Leave Chapter</button>
+      </form>
+      <!-- End Leave Formation Action -->
+
+   <% else %>
+
+      <!-- Join Formation Action -->
+      <form action="/join/<%= @formation.id %>" method="post">
+         <input type='hidden' name='authenticity_token' value="<%= form_authenticity_token %>">
+         <button class='float-right btn btn-primary' type='submit'>Join Chapter</button>
+      </form>
+      <!-- End Join Formation Action -->
+
+   <% end %>
+
+</div>
+
+<hr>
+
+<div class="col-8">
+
+   <% if @formation.user==current_user %>
+      <h3>Created By: YOU!</h3>
+   <% else %>
+      <h3>Created By: <%= @formation.user.first_name.titleize %> <%= @formation.user.last_name.titleize %> </h3>
+   <% end %>
+
+   <hr>
+
+   <h3>Warriors:</h3>
+   <% @formation.users.each do |user| %>
+      <ul>
+         <li><%= user.first_name.titleize %> <%= user.last_name.titleize %> </li>
+      </ul>
+   <% end %>
+
+</div>
+<hr noshade>
